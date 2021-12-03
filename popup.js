@@ -9,10 +9,12 @@ const main = async () => {
   const updateTextArea = (text) => {
     if (text === undefined) text = "";
     textarea.value = text;
+    textarea.style.overflowY = "hidden";
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
+    
     textarea.select();
   };
-
-  textarea.disabled = false;
 
   chrome.tabs.sendMessage(tab.id, { text: "query_testcases" }, (testcases) => {
     updateTextArea(testcases);

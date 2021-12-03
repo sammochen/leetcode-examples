@@ -8,16 +8,46 @@ const isWhitelisted = (url) => {
   return url.includes("leetcode.com");
 };
 
+const setGoodIcon = () => {
+  chrome.action.setIcon({ path: icons.enabled });
+  chrome.action.setPopup({ popup: "popup.html" });
+};
+
+const setBadIcon = () => {
+  chrome.action.setIcon({ path: icons.disabled });
+  chrome.action.setPopup({ popup: "" });
+};
+
+const sendMessagePromise = (tabId, args) => {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.sendMessage(tabId, args, (response) => {
+      try {
+        resolve(response);
+      } catch (e) {
+        reject("something wrong");
+      }
+    });
+  });
+};
+
 const updateIcon = async () => {
   const queryOptions = { active: true, currentWindow: true };
   const [tab] = await chrome.tabs.query(queryOptions);
 
-  if (isWhitelisted(tab.url)) {
-    chrome.action.setIcon({ path: icons.enabled });
-    chrome.action.setPopup({ popup: "popup.html" });
-  } else {
-    chrome.action.setIcon({ path: icons.disabled });
-    chrome.action.setPopup({ popup: "" });
+  try {
+    if (!isWhitelisted(tab.url)) throw new Error("not leetcode.com");
+
+    // try to send the active tab a message
+    const testcases = await sendMessagePromise(tab.id, {
+      text: "query_testcases",
+    });
+
+    if (!testcases || testcases.trim().length === 0)
+      throw new Error("no testcases");
+
+    setGoodIcon();
+  } catch {
+    setBadIcon();
   }
 };
 

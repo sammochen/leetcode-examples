@@ -34,14 +34,11 @@ const parseTestCases = () => {
   return parseTestCasesFromStrongs(strongs);
 };
 
-chrome.runtime.onMessage.addListener(function (msg, sender, cb) {
-  try {
-    if (msg.text === "query_testcases") {
-      const testcases = parseTestCases();
-      cb(testcases.join("\n"));
-      return;
-    }
-  } finally {
+chrome.runtime.onMessage.addListener(async (msg, sender, cb) => {
+  if (msg.text === "query_testcases") {
+    const testcases = parseTestCases();
+    cb(testcases.join("\n"));
+  } else {
     cb("");
   }
 });

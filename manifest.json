@@ -10,20 +10,22 @@
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "/images/16.png",
-      "32": "/images/32.png",
-      "128": "/images/128.png"
+      "16": "/images/on/16.png",
+      "32": "/images/on/32.png",
+      "192": "/images/on/192.png",
+      "512": "/images/on/512.png"
     }
   },
   "icons": {
-    "16": "/images/16.png",
-    "32": "/images/32.png",
-    "128": "/images/128.png"
+    "16": "/images/on/16.png",
+    "32": "/images/on/32.png",
+    "192": "/images/on/192.png",
+    "512": "/images/on/512.png"
   },
   "content_scripts": [
     {
-      "matches": ["https://leetcode.com/*"],
-      "js": ["parse-cases.js"]
+      "matches": ["*://*.leetcode.com/*"],
+      "js": ["content.js"]
     }
   ]
 }

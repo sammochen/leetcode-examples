@@ -1,30 +1,25 @@
 const icons = {
-  enabled: "/images/on.png",
-  disabled: "/images/off.png",
+  enabled: "./images/on/32.png",
+  disabled: "./images/off/32.png",
 };
 
 const isWhitelisted = (url) => {
   if (!url) return false;
-  return url.includes("leetcode");
+  return url.includes("leetcode.com");
 };
 
-chrome.tabs.onActivated.addListener(async ({ tabId }) => {
-  async function getCurrentTab() {
-    let queryOptions = { active: true, currentWindow: true };
-    let [tab] = await chrome.tabs.query(queryOptions);
-    return tab;
-  }
+const updateIcon = async () => {
+  const queryOptions = { active: true, currentWindow: true };
+  const [tab] = await chrome.tabs.query(queryOptions);
 
-  const tab = await getCurrentTab();
-
-  if (tab && isWhitelisted(tab.url)) {
-    console.log("whitelisted");
-    await chrome.action.setIcon({ path: icons.enabled });
-    await chrome.action.setPopup({ popup: "popup.html" });
+  if (isWhitelisted(tab.url)) {
+    chrome.action.setIcon({ path: icons.enabled });
+    chrome.action.setPopup({ popup: "popup.html" });
   } else {
-    console.log("blacklisted");
-
-    await chrome.action.setIcon({ path: icons.disabled });
-    await chrome.action.setPopup({ popup: "" });
+    chrome.action.setIcon({ path: icons.disabled });
+    chrome.action.setPopup({ popup: "" });
   }
-});
+};
+
+chrome.tabs.onActivated.addListener(updateIcon);
+chrome.tabs.onUpdated.addListener(updateIcon);

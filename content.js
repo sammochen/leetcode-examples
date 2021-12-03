@@ -1,5 +1,12 @@
-const parseTestCasesFromStrongs = (strongs) => {
-  // Assumes that "Input:" is <strong>
+/**
+ * Parses all test cases from current document
+ * Assumes:
+ * - "Input:" is in strong tag
+ * - The test cases follows the equal sign
+ * - Multiple parameters are separated by comma
+ */
+const parseTestCases = () => {
+  const strongs = document.getElementsByTagName("strong");
   const allLines = [];
   for (const strong of strongs) {
     if (strong.innerText === "Input:") {
@@ -29,12 +36,8 @@ const parseTestCasesFromStrongs = (strongs) => {
   return allLines;
 };
 
-const parseTestCases = () => {
-  const strongs = document.getElementsByTagName("strong");
-  return parseTestCasesFromStrongs(strongs);
-};
-
-chrome.runtime.onMessage.addListener(async (msg, sender, cb) => {
+// Parses testcases as a service
+chrome.runtime.onMessage.addListener(async (msg, _, cb) => {
   if (msg.text === "query_testcases") {
     const testcases = parseTestCases();
     cb(testcases.join("\n"));

@@ -6,6 +6,7 @@ const main = async () => {
 
   const textarea = document.getElementById("textarea");
 
+  // Updates the text of the textarea and adjusts the height to fit text
   const updateTextArea = (text) => {
     if (text === undefined) text = "";
     textarea.value = text;
@@ -16,6 +17,7 @@ const main = async () => {
     textarea.select();
   };
 
+  // Request the content.js service and update textarea
   chrome.tabs.sendMessage(
     tab.id,
     {

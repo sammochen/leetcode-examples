@@ -1,6 +1,6 @@
 {
-  "name": "LeetCode Helper",
-  "description": "Handy tools for LeetCode :)",
+  "name": "LeetCode Examples",
+  "description": "Easily copy all the examples for LeetCode problems",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
